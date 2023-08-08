@@ -1,5 +1,5 @@
 import { View, Image } from "react-native";
-import { TapGestureHandler } from "react-native-gesture-handler";
+import { TapGestureHandler, PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -8,8 +8,12 @@ import Animated, {
 } from "react-native-reanimated";
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
+const AnimatedView = Animated.createAnimatedComponent(View);
 
 export default function EmojiSticker({ imageSize, stickerSource }) {
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+
   const scaleImage = useSharedValue(imageSize);
 
   const onDoubleTap = useAnimatedGestureHandler({
@@ -27,21 +31,49 @@ export default function EmojiSticker({ imageSize, stickerSource }) {
     };
   });
 
+  const onDrag = useAnimatedGestureHandler({
+    onStart: (event, context) => {
+      context.translateX = translateX.value;
+      context.translateY = translateY.value;
+    },
+    onActive: (event, context) => {
+      translateX.value = event.translationX + context.translateX;
+      translateY.value = event.translationY + context.translateY;
+    },
+  });
+
+  const containerStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: translateX.value,
+        },
+        {
+          translateY: translateY.value,
+        },
+      ],
+    };
+  });
+
   return (
-    <View style={{ top: -350 }}>
-      <TapGestureHandler onGestureEvent={onDoubleTap} numberOfTaps={2}>
-        {/* <Image
+    // <View style={{ top: -350 }}>
+    <PanGestureHandler onGestureEvent={onDrag}>
+      <AnimatedView style={[containerStyle, { top: -350 }]}>
+        <TapGestureHandler onGestureEvent={onDoubleTap} numberOfTaps={2}>
+          {/* <Image
         source={stickerSource}
         resizeMode="contain"
         style={{ width: imageSize, height: imageSize }}
       /> */}
-        <AnimatedImage
-          source={stickerSource}
-          resizeMode="contain"
-          // style={{ width: imageSize, height: imageSize }}
-          style={[imageStyle, { width: imageSize, height: imageSize }]}
-        />
-      </TapGestureHandler>
-    </View>
+          <AnimatedImage
+            source={stickerSource}
+            resizeMode="contain"
+            // style={{ width: imageSize, height: imageSize }}
+            style={[imageStyle, { width: imageSize, height: imageSize }]}
+          />
+        </TapGestureHandler>
+      </AnimatedView>
+    </PanGestureHandler>
+    // </View>
   );
 }
