@@ -7,11 +7,15 @@ import { launchImageLibraryAsync } from "expo-image-picker";
 import { useState } from "react";
 import IconButton from "./components/IconButton";
 import CircleButton from "./components/CircleButton";
+import EmojiPicker from "./components/EmojiPicker";
 
 const PlaceholderImage = require("./assets/images/background-image.png");
 const bgImage = require("./assets/images/bg.png");
 
 export default function App() {
+  const [pickedEmoji, setPickedEmoji] = useState(null);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [showAppOptions, setShowAppOptions] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -34,12 +38,16 @@ export default function App() {
     setShowAppOptions(false);
   };
 
-  const onAddSticker = () => {
+  const onSaveImageAsync = async () => {
     // we will implement this later
   };
 
-  const onSaveImageAsync = async () => {
-    // we will implement this later
+  const onAddSticker = () => {
+    setIsModalVisible(true);
+  };
+
+  const onModalClose = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -50,6 +58,7 @@ export default function App() {
           <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} />
         </View>
 
+        {/* ACTION BUTTONS */}
         {showAppOptions ? (
           <View style={styles.optionsContainer}>
             <View style={styles.optionsRow}>
@@ -64,6 +73,11 @@ export default function App() {
             <Button label="Use this photo" onPress={() => setShowAppOptions(true)} />
           </View>
         )}
+
+        {/* MODAL */}
+        <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
+          {/* A list of emoji component will go here */}
+        </EmojiPicker>
 
         <StatusBar style="auto" />
       </View>
