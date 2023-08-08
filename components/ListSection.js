@@ -21,7 +21,7 @@ const sections = [
   },
 ]
 
-export default function App() {
+export default function ListSection() {
   return (
     <SectionList
       style={styles.container}

@@ -9,7 +9,7 @@ const items = [
   { id: '4', text: 'ListView' },
 ]
 
-export default function App() {
+export default function ListFlat() {
   return (
     <FlatList
       style={styles.container}
