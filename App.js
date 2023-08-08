@@ -8,6 +8,7 @@ import { useState } from "react";
 import IconButton from "./components/IconButton";
 import CircleButton from "./components/CircleButton";
 import EmojiPicker from "./components/EmojiPicker";
+import EmojiList from "./components/EmojiList";
 
 const PlaceholderImage = require("./assets/images/background-image.png");
 const bgImage = require("./assets/images/bg.png");
@@ -77,6 +78,7 @@ export default function App() {
         {/* MODAL */}
         <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
           {/* A list of emoji component will go here */}
+          <EmojiList onSelect={setPickedEmoji} onCloseModal={onModalClose} />
         </EmojiPicker>
 
         <StatusBar style="auto" />
