@@ -13,6 +13,8 @@ import EmojiSticker from "./components/EmojiSticker";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { captureRef } from "react-native-view-shot";
 import * as MediaLibrary from "expo-media-library";
+import domtoimage from "dom-to-image";
+import Touchable from "./components/Touchable";
 
 const PlaceholderImage = require("./assets/images/background-image.png");
 // const bgImage = require("./assets/images/bg.png");
@@ -51,36 +53,36 @@ export default function App() {
   };
 
   const onSaveImageAsync = async () => {
-    // if (Platform.OS !== "web") {
-    try {
-      const localUri = await captureRef(imageRef, {
-        height: 440,
-        quality: 1,
-      });
+    if (Platform.OS !== "web") {
+      try {
+        const localUri = await captureRef(imageRef, {
+          height: 440,
+          quality: 1,
+        });
 
-      await MediaLibrary.saveToLibraryAsync(localUri);
-      if (localUri) {
-        alert("Saved!");
+        await MediaLibrary.saveToLibraryAsync(localUri);
+        if (localUri) {
+          alert("Saved!");
+        }
+      } catch (e) {
+        console.log("e", e);
       }
-    } catch (e) {
-      console.log(e);
-    }
-    // } else {
-    //   try {
-    //     const dataUrl = await domtoimage.toJpeg(imageRef.current, {
-    //       quality: 0.95,
-    //       width: 320,
-    //       height: 440,
-    //     });
+    } else {
+      try {
+        const dataUrl = await domtoimage.toJpeg(imageRef.current, {
+          quality: 0.95,
+          width: 320,
+          height: 440,
+        });
 
-    //     let link = document.createElement("a");
-    //     link.download = "sticker-smash.jpeg";
-    //     link.href = dataUrl;
-    //     link.click();
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    // }
+        let link = document.createElement("a");
+        link.download = "sticker-smash.jpeg";
+        link.href = dataUrl;
+        link.click();
+      } catch (e) {
+        console.log(e);
+      }
+    }
   };
 
   const onAddSticker = () => {
@@ -96,7 +98,7 @@ export default function App() {
       {/* <ImageBackground source={bgImage} resizeMode="cover" style={styles.imageContainer}> */}
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <View ref={imageRef} collapsable={true}>
+          <View ref={imageRef} collapsable={false}>
             {/* <ImageViewer placeholderImageSource={PlaceholderImage} /> */}
             <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} />
             {pickedEmoji !== null ? <EmojiSticker imageSize={40} stickerSource={pickedEmoji} /> : null}
@@ -128,6 +130,8 @@ export default function App() {
         <StatusBar style="light" />
       </View>
       {/* </ImageBackground> */}
+
+      <Touchable />
     </GestureHandlerRootView>
   );
 }
