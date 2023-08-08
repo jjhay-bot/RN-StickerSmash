@@ -15,6 +15,7 @@ import { captureRef } from "react-native-view-shot";
 import * as MediaLibrary from "expo-media-library";
 import domtoimage from "dom-to-image";
 import Touchable from "./components/Touchable";
+import ScrollViewArea from "./components/ScrollViewArea";
 
 const PlaceholderImage = require("./assets/images/background-image.png");
 // const bgImage = require("./assets/images/bg.png");
@@ -132,6 +133,7 @@ export default function App() {
       {/* </ImageBackground> */}
 
       <Touchable />
+      <ScrollViewArea />
     </GestureHandlerRootView>
   );
 }
