@@ -133,11 +133,11 @@ export default function App() {
         <StatusBar style="light" />
       </View>
       {/* </ImageBackground> */}
-
+{/* 
       <Touchable />
       <ScrollViewArea />
       <ListFlat />
-      <ListSection />
+      <ListSection /> */}
     </GestureHandlerRootView>
   );
 }
